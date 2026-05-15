@@ -32,11 +32,11 @@ jobs:
     - name: Configure Webview, Security and Icon
       run: |
         cd myapp
-        # 1. توجيه التطبيق لرابط موقعك على Netlify
-        sed -i 's|<content src="index.html" />|<content src="https://fluffy-taffy-3bdf81.netlify-app/" />|g' config.xml
+        # 1. توجيه التطبيق للرابط الصحيح تماماً (تم تعديل الشرطة إلى نقطة قبل app)
+        sed -i 's|<content src="index.html" />|<content src="https://fluffy-taffy-3bdf81.netlify.app/" />|g' config.xml
         
         # 2. السماح للتطبيق بفتح الرابط وإخفاء الشاشة الرمادية تماماً (Delay = 0)
-        sed -i 's|</widget>|    <allow-navigation href="https://fluffy-taffy-3bdf81.netlify-app/*" />\n    <allow-navigation href="*" />\n    <preference name="SplashScreenDelay" value="0" />\n    <preference name="FadeSplashScreenDuration" value="0" />\n</widget>|g' config.xml
+        sed -i 's|</widget>|    <allow-navigation href="https://fluffy-taffy-3bdf81.netlify.app/*" />\n    <allow-navigation href="*" />\n    <preference name="SplashScreenDelay" value="0" />\n    <preference name="FadeSplashScreenDuration" value="0" />\n</widget>|g' config.xml
         
         # 3. ربط أيقونتك الخاصة icon-512.png بالتطبيق
         sed -i 's|</widget>|    <icon src="../icon-512.png" />\n</widget>|g' config.xml
