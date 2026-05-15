@@ -14,10 +14,10 @@ jobs:
     - name: Checkout Source Code
       uses: actions/checkout@v4
 
-    - name: Build APK from URL
-      uses: jonasmerlin/web-to-apk-action@v1
+    - name: Build Android APK
+      uses: nim901/pwa-to-apk-action@v1
       with:
         # رابط موقعك على نيتليفاي
-        url: https://fluffy-taffy-3bdf81.netlify.app/
-        # الاسم الذي تريده للتطبيق على شاشة الهاتف
-        name: My Netlify App
+        url: 'https://fluffy-taffy-3bdf81.netlify.app/'
+        # اسم التطبيق
+        name: 'My Netlify App'
