@@ -1,0 +1,17 @@
+{
+  "name": "samd app",
+  "short_name": "samd app",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#eef7ff",
+  "theme_color": "#eef7ff",
+  "description": "A curated visual portfolio gallery for samd designs.",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
