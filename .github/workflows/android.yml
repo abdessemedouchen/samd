@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android APK (Local Files)
 
 on:
   push:
@@ -24,19 +24,28 @@ jobs:
 
     - name: Create Cordova Project
       run: |
-        # تعيين اسم التطبيق ليصبح samd app
+        # إنشاء المشروع باسم samd app
         cordova create myapp com.ouchen.samdapp "samd app"
         cd myapp
         cordova platform add android
         
+    - name: Copy Local Web Files into App
+      run: |
+        # حذف ملفات كوردوفا الترحيبية الافتراضية
+        rm -rf myapp/www/*
+        
+        # نسخ كل ملفات موقعك الحالية (HTML, CSS, JS) إلى داخل مجلد التطبيق الداخلي
+        # استثناء مجلد myapp نفسه ومجلدات جيتهاب لكي لا يحدث تكرار
+        rsync -av --exclude='myapp' --exclude='.github' --exclude='.git' ./ myapp/www/
+
     - name: Configure Webview, Security and Icon
       run: |
         cd myapp
-        # 1. توجيه التطبيق للرابط الصحيح تماماً (تم تعديل الشرطة إلى نقطة قبل app)
-        sed -i 's|<content src="index.html" />|<content src="https://fluffy-taffy-3bdf81.netlify.app/" />|g' config.xml
+        # 1. إجبار التطبيق على فتح ملف index.html الداخلي بدلاً من رابط خارجي
+        sed -i 's|<content src="index.html" />|<content src="index.html" />|g' config.xml
         
-        # 2. السماح للتطبيق بفتح الرابط وإخفاء الشاشة الرمادية تماماً (Delay = 0)
-        sed -i 's|</widget>|    <allow-navigation href="https://fluffy-taffy-3bdf81.netlify.app/*" />\n    <allow-navigation href="*" />\n    <preference name="SplashScreenDelay" value="0" />\n    <preference name="FadeSplashScreenDuration" value="0" />\n</widget>|g' config.xml
+        # 2. إعدادات الأمان للملفات المحلية وإخفاء الشاشة الرمادية تماماً
+        sed -i 's|</widget>|    <preference name="SplashScreenDelay" value="0" />\n    <preference name="FadeSplashScreenDuration" value="0" />\n</widget>|g' config.xml
         
         # 3. ربط أيقونتك الخاصة icon-512.png بالتطبيق
         sed -i 's|</widget>|    <icon src="../icon-512.png" />\n</widget>|g' config.xml
@@ -55,5 +64,5 @@ jobs:
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: samd-app-apk
+        name: samd-app-local-apk
         path: myapp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
